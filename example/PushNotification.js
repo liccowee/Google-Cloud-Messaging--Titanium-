@@ -2,11 +2,8 @@
  * @author Activate
  */
 
-function PushNotification()
-{}
 
-module.exports = PushNotification;
-module.exports.pushNotification = function()
+exports.pushNotification = function()
 {
 	var senderId = "YOUR_PROJECT_ID";
 	var hostURL = "http://YOUR_HOST_URL/register?";

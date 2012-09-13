@@ -7,12 +7,12 @@
     <property name="ti.android.runtime">v8</property>
     <deployment-targets>
         <target device="mobileweb">false</target>
-        <target device="iphone">true</target>
+        <target device="iphone">false</target>
         <target device="ipad">false</target>
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>2.1.0.v20120416160358</sdk-version>
+    <sdk-version>2.1.2.GA</sdk-version>
     <id>com.activate.mohh</id>
     <name>MOHH</name>
     <version>1.0.1</version>
@@ -46,71 +46,10 @@
         <manifest android:versionCode="1" android:versionName="1.0" package="com.activate.mohh">
             <supports-screens android:anyDensity="true"/>
             <uses-sdk android:minSdkVersion="8"/>
-            <!--<permission
-                android:name="com.activate.mohh.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
-            <uses-permission android:name="com.activate.mohh.permission.C2D_MESSAGE"/>
-            <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-            <uses-permission android:name="android.permission.WAKE_LOCK"/>
-            <uses-permission android:name="android.permission.VIBRATE"/>
-            <uses-permission android:name="android.permission.INTERNET"/>
-            <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-            <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-            <application>
-                <receiver
-                    android:name="com.google.android.c2dm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
-                    <intent-filter>
-                        <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                        <category android:name="com.activate.mohh"/>
-                    </intent-filter>
-                    <intent-filter>
-                        <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-                        <category android:name="com.activate.mohh"/>
-                    </intent-filter>
-                </receiver>
-                <service android:name="com.activate.gcm.C2DMReceiver"/>
-            </application>-->
-            <permission
-                android:name="com.activate.mohh.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
-            <uses-permission android:name="com.activate.mohh.permission.C2D_MESSAGE"/>
-            <!-- This app has permission to register and receive message -->
-            <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-            <uses-permission android:name="android.permission.WAKE_LOCK"/>
-            <uses-permission android:name="android.permission.VIBRATE"/>
-            <uses-permission android:name="android.permission.INTERNET"/>
-            <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-            <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-            <application>
-                <service android:name="com.activate.gcm.GCMIntentService"/>
-                <receiver
-                    android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
-                    <!-- Start receiver on boot -->
-                    <intent-filter>
-                        <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                        <category android:name="android.intent.category.HOME"/>
-                    </intent-filter>
-                    <!-- Receive the actual message -->
-                    <intent-filter>
-                        <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                        <category android:name="com.activate.mohh"/>
-                    </intent-filter>
-                    <!-- Receive the registration id -->
-                    <intent-filter>
-                        <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-                        <category android:name="com.activate.mohh"/>
-                    </intent-filter>
-                </receiver>
-                <activity android:name=".MOHH" android:screenOrientation="landscape"/>
-            </application>
         </manifest>
+        <modules>
+			<module platform="android" version="0.1">com.activate.gcm</module>
+    	</modules>
     </android>
-    <mobileweb>
-        <precache/>
-        <splash>
-            <enabled>true</enabled>
-            <inline-css-images>true</inline-css-images>
-        </splash>
-        <theme>default</theme>
-    </mobileweb>
+
 </ti:app>
