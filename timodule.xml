@@ -2,7 +2,7 @@
 <ti:module xmlns:ti="http://ti.appcelerator.org" xmlns:android="http://schemas.android.com/apk/res/android">
 	<!-- Similar to tiapp.xml, but contains module/platform specific configuration in <iphone> and <android>/<android:manifest> sections -->
 	
-
+	<android xmlns:android="http://schemas.android.com/apk/res/android">
         <manifest package="com.activate.gcm" android:versionCode="1" android:versionName="1.0">
             <supports-screens android:anyDensity="true"/>
             <uses-sdk android:minSdkVersion="8"/>
@@ -41,5 +41,5 @@
 	
 			</application>
         </manifest>
-	
+	</android>	
 </ti:module>
