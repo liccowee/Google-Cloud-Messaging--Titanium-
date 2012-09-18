@@ -2,13 +2,13 @@ package com.activate.gcm;
 
 import java.io.IOException;
 import java.util.HashMap;
-import org.appcelerator.titanium.util.Log;
+import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.titanium.TiProperties;
+import org.appcelerator.kroll.common.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMBroadcastReceiver;
 import com.activate.gcm.C2dmModule;
-import static com.activate.gcm.CommonUtilities.SENDER_ID;
-//import com.keyview.souguide.C2DMReceiver;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -27,7 +27,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private static final String ERROR_EVENT = "error";
 
 	public GCMIntentService(){
-		super(SENDER_ID);
+		super(TiApplication.getInstance().getSystemProperties().getString("com.activate.gcm.sender_id", ""));
 	}
 
 	@Override
@@ -50,49 +50,46 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		HashMap data = new HashMap();
 		for (String key : intent.getExtras().keySet()) {
-			Log.d(LCAT, "Message key: " + key + " value: "
-					+ intent.getExtras().getString(key));
+			Log.d(LCAT, "Message key: " + key + " value: " + intent.getExtras().getString(key));
 
 			String eventKey = key.startsWith("data.") ? key.substring(5) : key;
 			data.put(eventKey, intent.getExtras().getString(key));
 		}
-		if (C2dmModule.getInstance() == null) {
-			int icon = 0x7f02000a; // get this from R.java
-			CharSequence tickerText = "Notification Ticker Here";
-			long when = System.currentTimeMillis();
 
-			CharSequence contentTitle = "Notification Title"; // expanded message title
-			CharSequence contentText = "Notification Content"; // expanded
-																			// message
-																			// text
+		int icon = TiApplication.getInstance().getSystemProperties().getInt("com.activate.gcm.icon", 0);
+		//another way to get icon :
+		//http://developer.appcelerator.com/question/116650/native-android-java-module-for-titanium-doesnt-generate-rjava
+		CharSequence tickerText = "Notification Ticker Here";
+		long when = System.currentTimeMillis();
 
-			Intent notificationIntent = new Intent(this, GCMIntentService.class);
+		CharSequence contentTitle = "Notification Title";
+		CharSequence contentText = "Notification Content";
 
-			Intent launcherintent = new Intent("android.intent.action.MAIN");
-			launcherintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.		FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			launcherintent
-					.setComponent(ComponentName
-							.unflattenFromString("[package name]/[package name].[activity name]"));
-			launcherintent.addCategory("android.intent.category.LAUNCHER");
-			
+		Intent notificationIntent = new Intent(this, GCMIntentService.class);
 
-			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-					launcherintent, 0);
+		Intent launcherintent = new Intent("android.intent.action.MAIN");
+		launcherintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		//I'm sure there is a better way ...
+		launcherintent.setComponent(ComponentName.unflattenFromString(TiApplication.getInstance().getSystemProperties().getString("com.activate.gcm.component", "")));
+		//
+		launcherintent.addCategory("android.intent.category.LAUNCHER");
 
-			// the next two lines initialize the Notification, using the
-			// configurations above
 
-			Notification notification = new Notification(icon, tickerText, when);
-			
-			notification.defaults = Notification.DEFAULT_ALL;
-			notification.flags = Notification.FLAG_AUTO_CANCEL;
-			notification.setLatestEventInfo(context, contentTitle, contentText,
-					contentIntent);
-			String ns = Context.NOTIFICATION_SERVICE;
-			NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-			mNotificationManager.notify(1, notification);
-		} else
-			C2dmModule.getInstance().sendMessage(data);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, launcherintent, 0);
+
+		// the next two lines initialize the Notification, using the
+		// configurations above
+
+		Notification notification = new Notification(icon, tickerText, when);
+
+		notification.defaults = Notification.DEFAULT_ALL;
+		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		String ns = Context.NOTIFICATION_SERVICE;
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+		mNotificationManager.notify(1, notification);
+
+		//C2dmModule.getInstance().sendMessage(data);
 	}
 
 	@Override
