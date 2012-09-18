@@ -5,12 +5,7 @@
 
 exports.pushNotification = function()
 {
-	var senderId = "YOUR_PROJECT_ID";
 	var hostURL = "http://YOUR_HOST_URL/register?";
-	
-	
-	/*var c2dm = require('com.findlaw.c2dm');
-	Ti.API.info("module c2dm is => " + c2dm);*/
 	
 	var gcm = require('com.activate.gcm');
 	Ti.API.info('module gcm is => ' + gcm);
@@ -18,8 +13,7 @@ exports.pushNotification = function()
 	Ti.API.info('Registering...');
 	
 	gcm.registerC2dm
-	(
-		senderId, 
+	( 
 		{
 			success:function(e)
 			{
@@ -91,7 +85,7 @@ exports.pushNotification = function()
 				Ti.API.info('JS message event: ' + JSON.stringify(e.data));
 				alert('JS message event: ' + JSON.stringify(e.data));
 				
-				var intent = Ti.Android.createIntent
+				/*var intent = Ti.Android.createIntent
 				(
 					{
 						action:Ti.Android.ACTION_MAIN,
@@ -121,7 +115,7 @@ exports.pushNotification = function()
 					}
 				);
 				
-				Ti.Android.NotificationManager.notify(1, notification);
+				Ti.Android.NotificationManager.notify(1, notification);*/
 			}
 		}
 	);
