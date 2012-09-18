@@ -17,6 +17,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
+import org.json.JSONObject;
+
 public class GCMIntentService extends GCMBaseIntentService {
 
 	private static final String LCAT = "C2DMReceiver";
@@ -48,6 +50,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		Log.d(LCAT, "Message received");
 
+		TiProperties systProp = TiApplication.getInstance().getSystemProperties();
+
 		HashMap data = new HashMap();
 		for (String key : intent.getExtras().keySet()) {
 			Log.d(LCAT, "Message key: " + key + " value: " + intent.getExtras().getString(key));
@@ -56,21 +60,21 @@ public class GCMIntentService extends GCMBaseIntentService {
 			data.put(eventKey, intent.getExtras().getString(key));
 		}
 
-		int icon = TiApplication.getInstance().getSystemProperties().getInt("com.activate.gcm.icon", 0);
+		int icon = systProp.getInt("com.activate.gcm.icon", 0);
 		//another way to get icon :
 		//http://developer.appcelerator.com/question/116650/native-android-java-module-for-titanium-doesnt-generate-rjava
-		CharSequence tickerText = "Notification Ticker Here";
+		CharSequence tickerText = (CharSequence) data.get("ticker");
 		long when = System.currentTimeMillis();
 
-		CharSequence contentTitle = "Notification Title";
-		CharSequence contentText = "Notification Content";
+		CharSequence contentTitle = (CharSequence) data.get("title");
+		CharSequence contentText = (CharSequence) data.get("message");
 
 		Intent notificationIntent = new Intent(this, GCMIntentService.class);
 
 		Intent launcherintent = new Intent("android.intent.action.MAIN");
 		launcherintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		//I'm sure there is a better way ...
-		launcherintent.setComponent(ComponentName.unflattenFromString(TiApplication.getInstance().getSystemProperties().getString("com.activate.gcm.component", "")));
+		launcherintent.setComponent(ComponentName.unflattenFromString(systProp.getString("com.activate.gcm.component", "")));
 		//
 		launcherintent.addCategory("android.intent.category.LAUNCHER");
 
@@ -89,7 +93,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
 		mNotificationManager.notify(1, notification);
 
-		//C2dmModule.getInstance().sendMessage(data);
+		JSONObject json = new JSONObject(data);
+		systProp.setString("com.activate.gcm.last_data", json.toString());
+		if (C2dmModule.getInstance() != null){
+			C2dmModule.getInstance().sendMessage(data);
+		}
 	}
 
 	@Override
