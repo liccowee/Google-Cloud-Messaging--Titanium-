@@ -22,9 +22,6 @@ import org.appcelerator.kroll.KrollFunction;
 
 import com.google.android.gcm.GCMRegistrar;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-
 
 @Kroll.module(name="Gcm", id="com.activate.gcm")
 public class C2dmModule extends KrollModule
