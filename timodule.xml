@@ -2,13 +2,15 @@
 <ti:module xmlns:ti="http://ti.appcelerator.org" xmlns:android="http://schemas.android.com/apk/res/android">
 	<!-- Similar to tiapp.xml, but contains module/platform specific configuration in <iphone> and <android>/<android:manifest> sections -->
 	
-
+	<android xmlns:android="http://schemas.android.com/apk/res/android">
         <manifest package="com.activate.gcm" android:versionCode="1" android:versionName="1.0">
             <supports-screens android:anyDensity="true"/>
             <uses-sdk android:minSdkVersion="8"/>
             
-	    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-	
+            <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+            <permission android:name="${tiapp.properties['id']}.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+            <uses-permission android:name="${tiapp.properties['id']}.permission.C2D_MESSAGE"/>
+
             <uses-permission android:name="android.permission.WAKE_LOCK"/>
             <uses-permission android:name="android.permission.VIBRATE"/>
             <uses-permission android:name="android.permission.INTERNET"/>
@@ -30,16 +32,16 @@
 					<!-- Receive the actual message -->
 					<intent-filter>
 						<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-						<category android:name="com.activate.gcm" />
+						<category android:name="${tiapp.properties['id']}" />
 					</intent-filter>
 					<!-- Receive the registration id -->
 					<intent-filter>
 						<action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-						<category android:name="com.activate.gcm" />
+						<category android:name="${tiapp.properties['id']}" />
 					</intent-filter>
 				</receiver>
 	
 			</application>
         </manifest>
-	
+	</android>
 </ti:module>

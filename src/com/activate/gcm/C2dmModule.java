@@ -15,16 +15,13 @@ import org.appcelerator.kroll.annotations.Kroll;
 
 import org.appcelerator.titanium.TiContext;
 import org.appcelerator.titanium.TiApplication;
-import org.appcelerator.titanium.util.Log;
+import org.appcelerator.titanium.TiProperties;
+import org.appcelerator.kroll.common.Log;
 import java.util.HashMap;
 import org.appcelerator.kroll.KrollFunction;
 
 import com.google.android.gcm.GCMRegistrar;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-
-import static com.activate.gcm.CommonUtilities.SENDER_ID;
 
 @Kroll.module(name="Gcm", id="com.activate.gcm")
 public class C2dmModule extends KrollModule
@@ -45,10 +42,8 @@ public class C2dmModule extends KrollModule
 
 	// Methods
 	@Kroll.method
-	public void registerC2dm(String senderId, HashMap options) {
+	public void registerC2dm(HashMap options) {
 		Log.d(LCAT, "registerC2dm called");
-
-		SENDER_ID = senderId;
 		
 		successCallback = (KrollFunction)options.get("success");
 		errorCallback = (KrollFunction)options.get("error");
@@ -59,21 +54,9 @@ public class C2dmModule extends KrollModule
         {
 			sendSuccess(registrationId);
 		} else {
-			GCMRegistrar.register(TiApplication.getInstance(), SENDER_ID);
+			GCMRegistrar.register(TiApplication.getInstance(), getSenderId());
 		}
 
-
-		/*GCMRegistrar.checkDevice(TiApplication.getInstance());
-		GCMRegistrar.checkManifest(TiApplication.getInstance());
-		final String regId = getRegistrationId();
-		if(regId.equals(""))
-		{
-			GCMRegistrar.register(TiApplication.getInstance(), SENDER_ID);
-		}
-		else
-		{
-			sendSuccess(regId);
-		}*/
 	}
 	
 	// Methods
@@ -94,7 +77,7 @@ public class C2dmModule extends KrollModule
 	@Kroll.method
 	public String getSenderId()
 	{
-		return SENDER_ID;
+		return TiApplication.getInstance().getSystemProperties().getString("com.activate.gcm.sender_id", "");
 	}
 
 	

@@ -2,18 +2,10 @@
  * @author Activate
  */
 
-function PushNotification()
-{}
 
-module.exports = PushNotification;
-module.exports.pushNotification = function()
+exports.pushNotification = function()
 {
-	var senderId = "YOUR_PROJECT_ID";
 	var hostURL = "http://YOUR_HOST_URL/register?";
-	
-	
-	/*var c2dm = require('com.findlaw.c2dm');
-	Ti.API.info("module c2dm is => " + c2dm);*/
 	
 	var gcm = require('com.activate.gcm');
 	Ti.API.info('module gcm is => ' + gcm);
@@ -21,8 +13,7 @@ module.exports.pushNotification = function()
 	Ti.API.info('Registering...');
 	
 	gcm.registerC2dm
-	(
-		senderId, 
+	( 
 		{
 			success:function(e)
 			{
@@ -93,38 +84,14 @@ module.exports.pushNotification = function()
 			{
 				Ti.API.info('JS message event: ' + JSON.stringify(e.data));
 				alert('JS message event: ' + JSON.stringify(e.data));
-				
-				var intent = Ti.Android.createIntent
-				(
-					{
-						action:Ti.Android.ACTION_MAIN,
-						flags:Ti.Android.FLAG_ACTIVITY_NEW_TASK | Ti.Android.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED,
-						packageName:'com.activate.mohh',
-						className:'com.activate.mohh.mohhActivity'
-					}
-				);
-				
-				// This is fairly static: Not much need to be altered here
-				var pending = Ti.Android.createPendingIntent
-				(
-					{
-						activity:Ti.Android.currentActivity,
-						intent:intent,
-						type:Ti.Android.PENDING_INTENT_FOR_ACTIVITY
-					}
-				);
-				
-				var notification = Ti.Android.createNotification
-				(
-					{
-						contentIntent:pending,
-						contentTitle:'New Message',
-						contentText:e.data.message,
-						tickerText:'New Message'
-					}
-				);
-				
-				Ti.Android.NotificationManager.notify(1, notification);
+
+				//same as e.data
+				//var data = Ti.App.Properties.getString("com.activate.gcm.last_data","");
+				//data = JSON.parse(data);
+				//Ti.App.Properties.removeProperty("com.activate.gcm.last_data");
+				//Ti.App.Properties.hasProperty("com.activate.gcm.last_data");
+				//Ti.Android.NotificationManager.cancelAll();
+
 			}
 		}
 	);
