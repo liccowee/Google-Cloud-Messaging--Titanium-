@@ -43,7 +43,7 @@
             <uses-sdk android:minSdkVersion="8"/>
         </manifest>
         <modules>
-			<module platform="android" version="0.2">com.activate.gcm</module>
+			<module platform="android" version="0.3">com.activate.gcm</module>
     	</modules>
     </android>
 	<property name="com.activate.gcm.sender_id" type="string">00000000</property> <!-- put your sender_id here -->
