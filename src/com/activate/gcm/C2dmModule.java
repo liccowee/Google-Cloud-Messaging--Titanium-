@@ -77,7 +77,7 @@ public class C2dmModule extends KrollModule
 	@Kroll.method
 	public String getSenderId()
 	{
-		return TiApplication.getInstance().getSystemProperties().getString("com.activate.gcm.sender_id", "");
+		return TiApplication.getInstance().getAppProperties().getString("com.activate.gcm.sender_id", "");
 	}
 
 	

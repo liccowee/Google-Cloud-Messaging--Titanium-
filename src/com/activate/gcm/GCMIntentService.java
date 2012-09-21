@@ -29,7 +29,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private static final String ERROR_EVENT = "error";
 
 	public GCMIntentService(){
-		super(TiApplication.getInstance().getSystemProperties().getString("com.activate.gcm.sender_id", ""));
+		super(TiApplication.getInstance().getAppProperties().getString("com.activate.gcm.sender_id", ""));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		Log.d(LCAT, "Message received");
 
-		TiProperties systProp = TiApplication.getInstance().getSystemProperties();
+		TiProperties systProp = TiApplication.getInstance().getAppProperties();
 
 		HashMap data = new HashMap();
 		for (String key : intent.getExtras().keySet()) {
