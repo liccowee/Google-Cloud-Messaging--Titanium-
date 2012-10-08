@@ -55,7 +55,6 @@ $data = array(
         	'message'=>'my message', 
         	'title'=>'message title',
         	'sound'=>'attention.wav',
-        	//'sound'=>'default',
         	'vibrate'=>'1'
         	),
         'registration_ids' => $regids
