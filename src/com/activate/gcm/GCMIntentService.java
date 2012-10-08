@@ -94,7 +94,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		if("default".equals(sound)) {
 			Log.e(LCAT, "Notification: DEFAULT_SOUND");
-		    notification.defaults |= Notification.DEFAULT_SOUND;
+		    	notification.defaults |= Notification.DEFAULT_SOUND;
 		} 
 		else if(sound != null) {
 
@@ -113,10 +113,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 			if (file.exists()) {
 				Uri soundUri = Uri.fromFile(file);
-		    	notification.sound = soundUri;
+		    		notification.sound = soundUri;
 			}
 			else {
-		    	notification.defaults |= Notification.DEFAULT_SOUND;
+		    		notification.defaults |= Notification.DEFAULT_SOUND;
 			}
 		}
 		
