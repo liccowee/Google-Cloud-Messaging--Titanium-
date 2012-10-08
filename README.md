@@ -7,7 +7,7 @@ Topic Covered
 -------------
 1. Steps to create module for Titanium use. (Mac Users) (For people that who want to create their own gcm module)
 2. How to use this module at titanium. (For people that use my created module)
-
+3. Custom sound.
 
 Steps to create module for Titanium use
 ---------------------------------------
@@ -45,6 +45,21 @@ How to use this module at titanium.
 2. Insert some data into tiapp.xml. I have upload my project tiapp.xml to this project, please navigate to /example/tiapp.xml for the references.
 
 3. After that, you also can refer to the /example/PushNotification.js as reference how to use push notification android in titanium. I have provided example into it.
+
+
+Custom sound.
+-------------
+
+$data = array(
+        'data' => array(
+        	'message'=>'my message', 
+        	'title'=>'message title',
+        	'sound'=>'attention.wav',
+        	//'sound'=>'default',
+        	'vibrate'=>'1'
+        	),
+        'registration_ids' => $regids
+    );      
 
 
 Document
