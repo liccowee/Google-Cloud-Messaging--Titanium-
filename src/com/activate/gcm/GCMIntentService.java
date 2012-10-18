@@ -1,6 +1,7 @@
 package com.activate.gcm;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.HashMap;
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiProperties;
@@ -16,6 +17,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import org.json.JSONObject;
 
@@ -72,7 +74,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		Intent notificationIntent = new Intent(this, GCMIntentService.class);
 
 		Intent launcherintent = new Intent("android.intent.action.MAIN");
-		launcherintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		launcherintent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 		//I'm sure there is a better way ...
 		launcherintent.setComponent(ComponentName.unflattenFromString(systProp.getString("com.activate.gcm.component", "")));
 		//
@@ -86,7 +88,44 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		Notification notification = new Notification(icon, tickerText, when);
 
-		notification.defaults = Notification.DEFAULT_ALL;
+		// Custom
+		CharSequence vibrate = (CharSequence) data.get("vibrate");
+		CharSequence sound = (CharSequence) data.get("sound");
+
+		if("default".equals(sound)) {
+			Log.e(LCAT, "Notification: DEFAULT_SOUND");
+		    	notification.defaults |= Notification.DEFAULT_SOUND;
+		} 
+		else if(sound != null) {
+
+			Log.e(LCAT, "Notification: sound "+sound);
+
+			String[] packagename = systProp.getString("com.activate.gcm.component", "").split("/");
+
+			String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+			String path = baseDir + "/"+ packagename[0] +"/sound/"+sound; 
+ 
+ 			Log.e(LCAT, path);
+
+			File file = new File(path);
+			
+			Log.i(TAG,"Sound exists : " + file.exists());
+
+			if (file.exists()) {
+				Uri soundUri = Uri.fromFile(file);
+		    		notification.sound = soundUri;
+			}
+			else {
+		    		notification.defaults |= Notification.DEFAULT_SOUND;
+			}
+		}
+		
+		if(vibrate != null) {
+			notification.defaults |= Notification.DEFAULT_VIBRATE;
+		}
+		
+		notification.defaults |= Notification.DEFAULT_LIGHTS;
+
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 		String ns = Context.NOTIFICATION_SERVICE;
@@ -117,3 +156,4 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 
 }
+
