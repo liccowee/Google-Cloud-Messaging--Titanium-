@@ -70,7 +70,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		CharSequence contentTitle = (CharSequence) data.get("title");
 		CharSequence contentText = (CharSequence) data.get("message");
-
+        
+        
 		Intent notificationIntent = new Intent(this, GCMIntentService.class);
 
 		Intent launcherintent = new Intent("android.intent.action.MAIN");
@@ -86,58 +87,64 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// the next two lines initialize the Notification, using the
 		// configurations above
 
-		Notification notification = new Notification(icon, tickerText, when);
+        if(contentText==null){
+            Log.d(LCAT, "Message received , no contentText so will make this silent");
+        }else{
+            Log.d(LCAT, "creating notification ...");
 
-		// Custom
-		CharSequence vibrate = (CharSequence) data.get("vibrate");
-		CharSequence sound = (CharSequence) data.get("sound");
-
-		if("default".equals(sound)) {
-			Log.e(LCAT, "Notification: DEFAULT_SOUND");
-		    	notification.defaults |= Notification.DEFAULT_SOUND;
-		} 
-		else if(sound != null) {
-
-			Log.e(LCAT, "Notification: sound "+sound);
-
-			String[] packagename = systProp.getString("com.activate.gcm.component", "").split("/");
-
-			String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-			String path = baseDir + "/"+ packagename[0] +"/sound/"+sound; 
- 
- 			Log.e(LCAT, path);
-
-			File file = new File(path);
+            Notification notification = new Notification(icon, tickerText, when);
+			// Custom
+			CharSequence vibrate = (CharSequence) data.get("vibrate");
+			CharSequence sound = (CharSequence) data.get("sound");
+            
+			if("default".equals(sound)) {
+				Log.e(LCAT, "Notification: DEFAULT_SOUND");
+                notification.defaults |= Notification.DEFAULT_SOUND;
+			}
+			else if(sound != null) {
+                
+				Log.e(LCAT, "Notification: sound "+sound);
+                
+				String[] packagename = systProp.getString("com.activate.gcm.component", "").split("/");
+                
+				String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+				String path = baseDir + "/"+ packagename[0] +"/sound/"+sound;
+                
+				Log.e(LCAT, path);
+                
+				File file = new File(path);
+				
+				Log.i(TAG,"Sound exists : " + file.exists());
+                
+				if (file.exists()) {
+					Uri soundUri = Uri.fromFile(file);
+                    notification.sound = soundUri;
+				}
+				else {
+                    notification.defaults |= Notification.DEFAULT_SOUND;
+				}
+			}
 			
-			Log.i(TAG,"Sound exists : " + file.exists());
-
-			if (file.exists()) {
-				Uri soundUri = Uri.fromFile(file);
-		    		notification.sound = soundUri;
+			if(vibrate != null) {
+				notification.defaults |= Notification.DEFAULT_VIBRATE;
 			}
-			else {
-		    		notification.defaults |= Notification.DEFAULT_SOUND;
-			}
-		}
-		
-		if(vibrate != null) {
-			notification.defaults |= Notification.DEFAULT_VIBRATE;
-		}
-		
-		notification.defaults |= Notification.DEFAULT_LIGHTS;
+			
+			notification.defaults |= Notification.DEFAULT_LIGHTS;
+            
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
+			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+			String ns = Context.NOTIFICATION_SERVICE;
+			NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+			mNotificationManager.notify(1, notification);
+        }
 
-		notification.flags = Notification.FLAG_AUTO_CANCEL;
-		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-		String ns = Context.NOTIFICATION_SERVICE;
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-		mNotificationManager.notify(1, notification);
-
-		JSONObject json = new JSONObject(data);
-		systProp.setString("com.activate.gcm.last_data", json.toString());
-		if (C2dmModule.getInstance() != null){
-			C2dmModule.getInstance().sendMessage(data);
-		}
-	}
+        JSONObject json = new JSONObject(data);
+        systProp.setString("com.activate.gcm.last_data", json.toString());
+        if (C2dmModule.getInstance() != null){
+            C2dmModule.getInstance().sendMessage(data);
+        }
+	
+    }
 
 	@Override
 	public void onError(Context context, String errorId) {
