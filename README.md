@@ -9,12 +9,12 @@ v0.5
 - Fixed push notification id which does not replace the notification in you list.
 - Integrated vibration and sound property when sending messsage from server.
 Example php message : 
-<code>
+```
 $gcm = new GCM();
 $registatoin_ids = array($regId);
 $message = array(title => 'title', message => $message, ticker => $message, vibrate => 1, sound => 'default');
 $result = $gcm->send_notification($registatoin_ids, $message);
-</code>
+```
 
 v0.3
 - Changed from getSystemProperties() to getAppProperties() at C2dmModule.java and GCMIntentService.java
