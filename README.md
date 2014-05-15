@@ -5,6 +5,10 @@ Current Latest version is 0.5
 
 Change Log
 ------------
+v0.6
+- Fixed most of the issue.
+- Compatible with Titanium SDK 3.2.0 and higher including 3.2.3
+
 v0.5
 - Fixed push notification id which does not replace the notification in you list.
 - Integrated vibration and sound property when sending messsage from server.
